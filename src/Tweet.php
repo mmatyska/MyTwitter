@@ -1,10 +1,11 @@
 <?php
 
 require_once 'polaczenie.php';  //class polaczenie sets up connection to db.. 
-
-class Tweet{
+require_once 'SqlBasicSets.php';
     
-    public static $conn = null;
+class Tweet extends SqlBasicSets{
+    
+    //public static $conn = null;   //w klasie rodzicu
     private $id, $user_id, $tweet, $creation_date;
     
     public function __construct() {
@@ -46,6 +47,7 @@ class Tweet{
     }
 
     public static function loadTweetById($id){
+        
         $sql = "SELECT * FROM Tweets WHERE id = $id";
         $result = self::$conn->query($sql);
         if ( $result == true && $result->num_rows == 1 ) {
@@ -60,6 +62,42 @@ class Tweet{
         return null;
     }
     
+    public static function loadAllTweetsByUserId($user_id){             
+        $columns = self::describeTable('Tweets');                   //pobrane kolumny danej tabeli
+        
+        $sql = "SELECT * FROM Tweets WHERE user_id = $user_id";
+        $returnTable = [];
+        if ( $result = self::$conn->query($sql) ) {
+            foreach ( $result as $row ) {                                                       
+                $loadedTweets4user = new Tweet();
+                foreach($columns as $col){
+                    $loadedTweets4user->$col = $row["$col"];
+                }
+            
+                $returnTable[] = $loadedTweets4user;
+            }
+            return $returnTable;
+        }
+        return null;
+    }
+    
+    public static function loadAllTweets(){
+        $columns = self::describeTable('Tweets');
+        
+        $sql = "SELECT * FROM Tweets";
+        $returnTable = [];
+        if ( $result = self::$conn->query($sql) ) {
+            foreach ( $result as $row ) {
+                $allTweets = new Tweet();
+                foreach($columns as $col){
+                    $allTweets->$col = $row["$col"];
+                }
+                $returnTable[] = $allTweets;
+            }
+            return $returnTable;
+        }
+    }
+    
 }
 
 
@@ -69,4 +107,10 @@ Tweet::$conn = $polaczenie->getConn();
 
 $ob = new Tweet();
 //$ob = Tweet::loadTweetById(1);
-var_dump($ob);
+var_dump(Tweet::loadAllTweetsByUserId(19));
+var_dump(Tweet::loadAllTweets());
+
+
+//$ob->describeTable('Users');
+
+//var_dump($ob->describeTable('Tweets'));

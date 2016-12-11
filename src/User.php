@@ -1,15 +1,15 @@
 <?php
 
 require_once 'polaczenie.php';
-
+require_once 'SqlBasicSets.php';
 //vdoc
-class User {
+class User extends SqlBasicSets{
 
     /**
      *
      * @var mysqli | null 
      */
-    public static $conn = null;
+    //public static $conn = null;   //w klasie rodzicu
     private $id;
     private $username;
     private $hashedPassword;
@@ -104,7 +104,7 @@ class User {
         return null;
     }
 
-    static public function loadAllUsers() {     //
+    static public function loadAllUsers() {     //wrzucam całą tabelę więc parametr jest zbędny
         $sql = "SELECT * FROM Users";
         $returnTable = [];
         if ( $result = self::$conn->query($sql) ) {
@@ -137,15 +137,15 @@ class User {
 
 //$conn = new prototypPolaczenia('warsztaty2');
 //User::$conn = $conn->getConn();
-
-
 //
-////$ob = new User();
+//
+////
+//$ob = new User();
 //$ob = User::loadUserById(19);
 ////var_dump($ob);
 ////$ob->setId(1);
 //$ob->setUsername('Marcin');
-//$ob->setEmail('mmatyska755@gmail.com');
+//$ob->setEmail('marcin75@gmail.com');
 ////
 //$ob->setHashedPassword('zxc123');
 //$ob->saveToDb();
