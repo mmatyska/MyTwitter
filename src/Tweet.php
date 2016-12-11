@@ -48,15 +48,17 @@ class Tweet extends SqlBasicSets{
 
     public static function loadTweetById($id){
         
+        $columns = self::describeTable('Tweets');
         $sql = "SELECT * FROM Tweets WHERE id = $id";
         $result = self::$conn->query($sql);
+        
         if ( $result == true && $result->num_rows == 1 ) {
             $row = $result->fetch_assoc();
+           
             $loadedTweet = new Tweet();
-            $loadedTweet -> id = $row['id'];
-            $loadedTweet -> user_id = $row['user_id'];
-            $loadedTweet -> creation_date = $row['creation_date'];
-            
+            foreach($columns as $col){
+                $loadedTweet->$col = $row["$col"];
+            }           
             return $loadedTweet;
         }
         return null;
@@ -64,16 +66,15 @@ class Tweet extends SqlBasicSets{
     
     public static function loadAllTweetsByUserId($user_id){             
         $columns = self::describeTable('Tweets');                   //pobrane kolumny danej tabeli
-        
         $sql = "SELECT * FROM Tweets WHERE user_id = $user_id";
         $returnTable = [];
+
         if ( $result = self::$conn->query($sql) ) {
             foreach ( $result as $row ) {                                                       
                 $loadedTweets4user = new Tweet();
                 foreach($columns as $col){
                     $loadedTweets4user->$col = $row["$col"];
                 }
-            
                 $returnTable[] = $loadedTweets4user;
             }
             return $returnTable;
@@ -98,17 +99,52 @@ class Tweet extends SqlBasicSets{
         }
     }
     
+        public function saveToDb() {
+        if ( self::$conn != NULL ) {                                //
+            if ( $this->id == -1 ) {
+                $sql = "INSERT INTO Tweets (user_id, tweet, creation_date)"
+                        . " values('$this->user_id', '$this->tweet', '$this->creation_date')";
+                $result = self::$conn->query($sql);                 //połączenie do bazy    
+                
+                if ( $result == true ) {                            //pobieram ostatni id i przypisuje do mojego id
+
+                    $this->id = self::$conn->insert_id;
+                    return true;
+                }
+            } else {
+
+                $sql = "UPDATE Tweets SET "
+                        . "user_id = '$this->user_id', "
+                        . "tweet = '$this->tweet', "
+                        . "creation_date = '$this->creation_date'"
+                        . " where id = $this->id";
+
+                $result = self::$conn->query($sql);
+
+                if ( $result == true ) {
+                    return true;
+                }
+            }
+        } else {
+            echo "Brak połączenia\n";
+        }
+        return false;
+    }
+    
 }
 
 
-$polaczenie = new prototypPolaczenia('warsztaty2');
-Tweet::$conn = $polaczenie->getConn();
-
-
-$ob = new Tweet();
+//$polaczenie = new prototypPolaczenia('warsztaty2');
+//Tweet::$conn = $polaczenie->getConn();
+//
+//
+//$ob = new Tweet();
 //$ob = Tweet::loadTweetById(1);
-var_dump(Tweet::loadAllTweetsByUserId(19));
-var_dump(Tweet::loadAllTweets());
+//$ob->setTweet('zmiana treści tego tweeta');
+//$ob->saveToDb();
+//var_dump(Tweet::loadAllTweetsByUserId(19));
+//var_dump(Tweet::loadAllTweets());
+//var_dump(Tweet::loadTweetById(1));
 
 
 //$ob->describeTable('Users');

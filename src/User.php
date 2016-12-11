@@ -68,8 +68,7 @@ class User extends SqlBasicSets{
                     return true;
                 }
             } else {
-                //var_dump($this->id);
-                //var_dump('aaa');
+
                 $sql = "UPDATE Users SET "
                         . "username = '$this->username', "
                         . "email = '$this->email', "
@@ -90,31 +89,35 @@ class User extends SqlBasicSets{
     }
 
     public static function loadUserById($id) {
+        
+        $columns = self::describeTable('Users');
         $sql = "SELECT * FROM Users WHERE id=$id";
         $result = self::$conn->query($sql);
+       
         if ( $result == true && $result->num_rows == 1 ) {
             $row = $result->fetch_assoc();
             $loadedUser = new User();
-            $loadedUser->id = $row['id'];
-            $loadedUser->username = $row['username'];
-            $loadedUser->hashedPassword = $row['hashedPassword'];
-            $loadedUser->email = $row['email'];
+            foreach($columns as $col){
+                $loadedUser->$col = $row["$col"];
+            }
             return $loadedUser;
         }
         return null;
     }
 
     static public function loadAllUsers() {     //wrzucam całą tabelę więc parametr jest zbędny
+        $columns = self::describeTable('Users');
         $sql = "SELECT * FROM Users";
         $returnTable = [];
+        
         if ( $result = self::$conn->query($sql) ) {
-            foreach ( $result as $row ) {
+            foreach ( $result as $row ) {              
+                
                 $loadedUser = new User();
-                $loadedUser->id = $row['id'];
-                $loadedUser->username = $row['username'];
-                $loadedUser->hashedPassword = $row['hashedPassword'];
-                $loadedUser->email = $row['email'];
-
+                foreach($columns as $col){
+                    $loadedUser->$col = $row["$col"];
+                }
+                
                 $returnTable[] = $loadedUser;
             }
         }
@@ -137,11 +140,9 @@ class User extends SqlBasicSets{
 
 //$conn = new prototypPolaczenia('warsztaty2');
 //User::$conn = $conn->getConn();
-//
-//
-////
-//$ob = new User();
-//$ob = User::loadUserById(19);
+////$ob = new User();
+//var_dump($ob = User::loadUserById(19));
+//var_dump($ob = User::loadAllUsers());
 ////var_dump($ob);
 ////$ob->setId(1);
 //$ob->setUsername('Marcin');

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 11 Gru 2016, 18:18
+-- Czas generowania: 11 Gru 2016, 22:54
 -- Wersja serwera: 5.7.16-0ubuntu0.16.04.1
 -- Wersja PHP: 7.0.8-0ubuntu0.16.04.3
 
@@ -38,7 +38,12 @@ CREATE TABLE `Tweets` (
 --
 
 INSERT INTO `Tweets` (`id`, `user_id`, `tweet`, `creation_date`) VALUES
-(1, 19, 'tweet o niczym ale pierwszy', '2016-12-11');
+(1, 19, 'zmiana treÅ›ci tego tweeta', '2016-12-11'),
+(2, 19, 'tweet o niczym ale drugi', '2016-12-11'),
+(3, 19, 'tweet o niczym ale trzeci', '2016-12-11'),
+(4, 19, 'tweet o niczym ale czwarty', '2016-12-11'),
+(5, 21, 'tweet o niczym ale pierwszy drugiego użytkownika', '2016-12-11'),
+(6, 21, 'tweet o niczym ale drugi drugiego użytkownika', '2016-12-11');
 
 -- --------------------------------------------------------
 
@@ -58,7 +63,7 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`id`, `email`, `username`, `hashedPassword`) VALUES
-(19, 'mmatyska755@gmail.com', 'Marcin', '$2y$10$c6xoZX6cWS87wTmGLm4AtuGhnx5ZWa770ws27Zmu/Yj2cElRYvEMe'),
+(19, 'marcin75@gmail.com', 'Marcin', '$2y$10$c6xoZX6cWS87wTmGLm4AtuGhnx5ZWa770ws27Zmu/Yj2cElRYvEMe'),
 (21, 'jan1455@wp.pl', 'Jan', '$2y$10$Rp5Bbkos/D.1LHnsgfTCO.NwbwnGQVhW0tnfxzn/1LRd53BxaE5X2');
 
 --
@@ -89,7 +94,7 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT dla tabeli `Tweets`
 --
 ALTER TABLE `Tweets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT dla tabeli `Users`
 --
