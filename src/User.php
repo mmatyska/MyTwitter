@@ -38,9 +38,9 @@ class User {
         return $this->email;
     }
 
-    function setId($id) {
-        $this->id = $id;
-    }
+//    function setId($id) {
+//        $this->id = $id;
+//    }
 
     function setUsername($username) {
         $this->username = $username;
@@ -89,7 +89,7 @@ class User {
         return false;
     }
 
-    static public function loadUserById($id) {
+    public static function loadUserById($id) {
         $sql = "SELECT * FROM Users WHERE id=$id";
         $result = self::$conn->query($sql);
         if ( $result == true && $result->num_rows == 1 ) {
@@ -104,7 +104,7 @@ class User {
         return null;
     }
 
-    static public function loadAllUsers() {     //z prezentacji ma tu być parametr będący obiektem połączenia 
+    static public function loadAllUsers() {     //
         $sql = "SELECT * FROM Users";
         $returnTable = [];
         if ( $result = self::$conn->query($sql) ) {
