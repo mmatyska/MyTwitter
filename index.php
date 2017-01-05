@@ -26,6 +26,7 @@ and open the template in the editor.
         foreach ($tweetsObj->loadAllTweets() as $rows){
            echo "<tr>";
            echo "<td>{$rows->getTweet()}</td>";
+           echo "<td>{$rows->getCreation_date()}</td>";
            echo "</tr>";
         }
         echo "</table>";
