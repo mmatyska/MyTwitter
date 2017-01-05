@@ -30,6 +30,7 @@ and open the template in the editor.
            echo "</tr>";
         }
         echo "</table>";
+        echo "<hr>";
         ?>
     </body>
 </html>
